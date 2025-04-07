@@ -1,3 +1,10 @@
+#This project is will be using Kazuhito00 hand gesture recognition as a framework
+#pip installs needed: tensorflow-cpu, panda, mediapipe, opencv-python, scikit-learn, numpy
+
+#Our own datapoints will be stored in the keypoints.csv file
+#the jupyter notebook has to be adjusted to account for how many unique gestures we want
+
+
 # hand-gesture-recognition-using-mediapipe
 Estimate hand pose using MediaPipe (Python version).<br> This is a sample 
 program that recognizes hand signs and finger gestures with a simple MLP using the detected key points.
