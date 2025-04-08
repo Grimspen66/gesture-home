@@ -141,7 +141,7 @@ def main():
 
                 #Hand sign classification
                 hand_sign_id = keypoint_classifier(pre_processed_landmark_list)
-                if hand_sign_id == 2:  # Point gesture
+                if hand_sign_id == "not applicable":  # Point gesture
                     point_history.append(landmark_list[8])
                 else:
                     point_history.append([0, 0])
@@ -159,7 +159,7 @@ def main():
                     finger_gesture_history).most_common()
 
                 # Drawing part
-                debug_image = draw_bounding_rect(use_brect, debug_image, brect)
+                #debug_image = draw_bounding_rect(use_brect, debug_image, brect)
                 debug_image = draw_landmarks(debug_image, landmark_list)
                 debug_image = draw_info_text(
                     debug_image,
@@ -500,8 +500,8 @@ def draw_info_text(image, brect, handedness, hand_sign_text,
     if hand_sign_text != "":
         info_text = info_text + ':' + hand_sign_text
     cv.putText(image, info_text, (brect[0] + 5, brect[1] - 4),
-               cv.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1, cv.LINE_AA)
-
+        cv.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1, cv.LINE_AA)
+    #
     if finger_gesture_text != "":
         cv.putText(image, "Finger Gesture:" + finger_gesture_text, (10, 60),
                    cv.FONT_HERSHEY_SIMPLEX, 1.0, (0, 0, 0), 4, cv.LINE_AA)
