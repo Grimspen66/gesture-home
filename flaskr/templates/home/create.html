@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}New Appliance{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="appliance_name">Appliance Name</label>
+    <input name="appliance_name" id="appliance_name" value="{{ request.form['appliance_name'] }}" required>
+    <label for="gesture">Gesture</label>
+    <textarea name="gesture" id="gesture">{{ request.form['gesture'] }}</textarea>
+    <input type="submit" value="Save">
+  </form>
+{% endblock %}
