@@ -15,9 +15,6 @@
           <h1>{{ appliance['appliance_name'] }}</h1>
           <div class="about">on {{ appliance['created'].strftime('%Y-%m-%d') }}</div>
         </div>
-        {% if g.user['id'] == appliance['user_id'] %}
-          <a class="action" href="{{ url_for('home.update', id=appliance['id']) }}">Edit</a>
-        {% endif %}
       </header>
       <p class="body">{{ appliance['gesture'] }}</p>
     </article>

@@ -13,9 +13,9 @@ bp = Blueprint('home', __name__)
 def index(id, check_author = True):
     db = get_db()
     appliances = db.execute(
-        'SELECT a.user_id, appliance_name'
-        'FROM appliances JOIN user u ON a.user_id = u.id'
-        'WHERE a.id = ?',
+        'SELECT a.id, appliance_name, user_id, gesture'
+        ' FROM appliance a JOIN user u ON a.user_id = u.id'
+        ' WHERE a.id = ?',
         (id,)
     ).fetchall()
     return render_template('home/index.html', appliances=appliances)
@@ -35,12 +35,6 @@ def create():
             flash(error)
         else:
             db = get_db()
-            db.execute(
-                'INSERT INTO settings (user_id, appliance)'
-                ' VALUES (?, ?)',
-                (g.user['id'], appliance)
-            )
-            db.commit()
             db.execute(
                 'INSERT INTO appliance (user_id, appliance_name, gesture)'
                 ' VALUES (?, ?, ?)',
