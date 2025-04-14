@@ -8,6 +8,12 @@ from flaskr.db import get_db
 
 bp = Blueprint('home', __name__)
 
+@bp.route('/')
+@login_required
+def startpage():
+    id = g.user['id']
+    return redirect(url_for('home.index', id=id))
+
 @bp.route('/<int:id>')
 @login_required
 def index(id, check_author = True):
@@ -15,7 +21,7 @@ def index(id, check_author = True):
     appliances = db.execute(
         'SELECT a.id, appliance_name, user_id, gesture'
         ' FROM appliance a JOIN user u ON a.user_id = u.id'
-        ' WHERE a.id = ?',
+        ' WHERE a.user_id = ?',
         (id,)
     ).fetchall()
     return render_template('home/index.html', appliances=appliances)
@@ -24,7 +30,7 @@ def index(id, check_author = True):
 @login_required
 def create():
     if request.method == 'POST':
-        appliance = request.form['appliance']
+        appliance = request.form['appliance_name']
         gesture = request.form['gesture']
         error = None
 
@@ -41,6 +47,6 @@ def create():
                 (g.user['id'], appliance, gesture)
             )
             db.commit()
-            return redirect(url_for('home.index'))
+            return redirect(url_for('home.index', id=g.user['id']))
 
     return render_template('home/create.html')

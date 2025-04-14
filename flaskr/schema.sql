@@ -11,6 +11,5 @@ CREATE TABLE appliance (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
     appliance_name TEXT NOT NULL,
-    gesture TEXT NOT NULL,
-    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    gesture TEXT NOT NULL
 );
