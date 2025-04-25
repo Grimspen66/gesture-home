@@ -171,7 +171,7 @@ def main():
                 ###Additions 4/22/25
                 #takes predicted hand id and maps it to label
                 gesture_label = keypoint_classifier_labels[hand_sign_id]
-                
+                last_gesture = None
                 #checks how quickly the gestures are read
                 current_time = time.time()
 
