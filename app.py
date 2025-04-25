@@ -15,6 +15,12 @@ from utils import CvFpsCalc
 from model import KeyPointClassifier
 from model import PointHistoryClassifier
 
+#4/24/25
+import tkinter as tk
+from threading import Thread
+import time  
+
+
 
 def get_args():
     parser = argparse.ArgumentParser()
@@ -56,12 +62,32 @@ def main():
     cap = cv.VideoCapture(cap_device)
     cap.set(cv.CAP_PROP_FRAME_WIDTH, cap_width)
     cap.set(cv.CAP_PROP_FRAME_HEIGHT, cap_height)
+    
+       # Memory for tracking gesture sequences
+    last_gesture = None
+    last_time = 0
 
+    # dictionary with multi-input key
+    gesture_sequences = {
+
+        ("vit", "Fireball"): "on",
+        ("Pointer", "Rock'n'Roll"): "off",
+        ("Open", "Fireball"): "volume up",
+        ("Close", "Pointer"): "volume down"
+    }
+
+
+    
     # Model load #############################################################
     mp_hands = mp.solutions.hands
     hands = mp_hands.Hands(
         static_image_mode=use_static_image_mode,
-        max_num_hands=2,
+        
+        ####Changed back to one until i figure out how to stop it
+        ####opening an absurd amount of windows
+        max_num_hands=1,
+        
+        
         min_detection_confidence=min_detection_confidence,
         min_tracking_confidence=min_tracking_confidence,
     )
@@ -141,10 +167,46 @@ def main():
 
                 #Hand sign classification
                 hand_sign_id = keypoint_classifier(pre_processed_landmark_list)
-                if hand_sign_id == "not applicable":  # Point gesture
-                    point_history.append(landmark_list[8])
+                
+                ###Additions 4/22/25
+                #takes predicted hand id and maps it to label
+                gesture_label = keypoint_classifier_labels[hand_sign_id]
+                
+                #checks how quickly the gestures are read
+                current_time = time.time()
+
+                #checks for previously recorded gesture
+                #makes gesture pair
+                if last_gesture:
+                    gesture_pair = (last_gesture, gesture_label)
+                    #compares gesture pair with set sequences on line 77
+                    #checks if the pair was completed in less than a second
+                    if gesture_pair in gesture_sequences and current_time - last_time <= 1.0:
+                        
+                        #if combonations are performed in correct order
+                        #tkinter window displays a message for performed action
+                        if gesture_sequences[gesture_pair] == "on":
+                            show_message("Light", "Light Bulb ON")
+                        elif gesture_sequences[gesture_pair] == "off":
+                            show_message("Light", "Light Bulb OFF")
+                        elif gesture_sequences[gesture_pair] == "volume up":
+                            show_message("Music","Volume Up")
+                        elif gesture_sequences[gesture_pair] == "volume down":
+                            show_message("Music","Volume Down")
+                            
+                        #reset for gesture recognition
+                        last_gesture = None
+                        last_time = 0
+                    else:
+                        #if too slow, stores last gesture
+                        last_gesture = gesture_label
+                        last_time = current_time
                 else:
-                    point_history.append([0, 0])
+    
+                    last_gesture = gesture_label
+                    last_time = current_time                ####end of addition 4/22/25
+
+
 
                 # Finger gesture classification
                 finger_gesture_id = 0
@@ -538,6 +600,24 @@ def draw_info(image, fps, mode, number):
                        cv.LINE_AA)
     return image
 
+#####addtion 4/24/25
+#title/message appear when user performs gesture
+#disappears after 1.5 seconds
+def show_message(title, message):
+    #creates popup window
+    def _popup():
+        #main popup window, title, size, and background
+        root = tk.Tk()
+        root.title(title)
+        root.geometry("200x100")
+        root.configure(bg='black')
+        
+        #tkinter widget displaying text
+        label = tk.Label(root, text=message, fg="white", bg="black", font=("Cambria Math", 14))
+        label.pack(expand=True)
+        root.after(1500, lambda:root.destroy())
+        root.mainloop()
+    Thread(target=_popup).start()
 
 if __name__ == '__main__':
     main()
