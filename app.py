@@ -18,7 +18,10 @@ from model import PointHistoryClassifier
 #4/24/25
 import tkinter as tk
 from threading import Thread
-import time  
+import time
+
+#4/28/25
+from phue import
 
 
 
@@ -70,7 +73,7 @@ def main():
     # dictionary with multi-input key
     gesture_sequences = {
 
-        ("vit", "Fireball"): "on",
+        ("Vit", "Fireball"): "on",
         ("Pointer", "Rock'n'Roll"): "off",
         ("Open", "Fireball"): "volume up",
         ("Close", "Pointer"): "volume down"
@@ -171,7 +174,7 @@ def main():
                 ###Additions 4/22/25
                 #takes predicted hand id and maps it to label
                 gesture_label = keypoint_classifier_labels[hand_sign_id]
-                last_gesture = None
+
                 #checks how quickly the gestures are read
                 current_time = time.time()
 
