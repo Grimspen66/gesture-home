@@ -199,7 +199,7 @@ def main():
                         print(f"Gesture combo matched: {gesture_pair} → Action: {action}")
 
                         if action == "on":
-                            show_message("Light", "Light Bulb ON")   
+                            show_message("Light", "Light Bulb ON")
                         elif action == "off":
                             show_message("Light", "Light Bulb OFF")
                             action = "off"
@@ -615,7 +615,7 @@ def draw_info(image, fps, mode, number):
                        cv.LINE_AA)
     return image
 #commented out, dont really need this window now
-'''
+
 #####addtion 4/24/25
 #title/message appear when user performs gesture
 #disappears after 1.5 seconds
@@ -634,7 +634,7 @@ def show_message(title, message):
         root.after(1500, lambda:root.destroy())
         root.mainloop()
     Thread(target=_popup).start()
-'''
+
 #some guidance was needed from chat gpt to help with handling the async logic
 # do smartthings stuff
 async def do_smartthings(action):
