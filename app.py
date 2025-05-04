@@ -80,10 +80,9 @@ def main():
     # combos
     combo_map = {
 
-        ("Vit", "Fireball"): "on",
-        ("Pointer", "Rock'n'Roll"): "off",
-        ("Open", "Fireball"): "volume up",
-        ("Close", "Pointer"): "volume down"
+        ("Close", "Fireball"): "on",
+        ("Fireball", "Close"): "off",
+
     }
 
 
