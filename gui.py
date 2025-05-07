@@ -4,11 +4,11 @@ import json
 import csv
 import os
 
-with open('model\keypoint_classifier\keypoint_classifier_label.csv', newline='', encoding='utf-8-sig') as f:
-    reader = csv.reader(f)
-    gestureList = list(reader)
+gestureList = []
+with open('model\keypoint_classifier\keypoint_classifier_label.csv', encoding='utf-8-sig') as f:
+    for line in f:
+        gestureList.append(line.rstrip())
     print(gestureList)
-
 allApplianceList = []
 
 
@@ -70,9 +70,6 @@ class HomePage(tk.Frame):
         self.titleBar(controller)
         '''settings = readFilesInFolder("user_settings")
         print(settings)'''
-        homePageTitle = tk.Label(self, text="Home")
-        homePageTitle.grid(row=0, column=3, padx=300)
-        homePageTitle.configure(bg="#92b6f0")
         self.configure(bg="#92b6f0")
 
         testL = tk.Label(self, text="test")
@@ -89,10 +86,6 @@ class HomePage(tk.Frame):
         homeButton.grid(row=0, column=0)
         createButton.grid(row=0, column=1)
 
-        createPageTitle = tk.Label(titleFrame, text="Home")
-        createPageTitle.grid(row=0, column=3, padx=275)
-        createPageTitle.configure(bg="#92b6f0")
-
         
 
 class CreatePage(tk.Frame):
@@ -101,7 +94,7 @@ class CreatePage(tk.Frame):
         self.titleBar(controller)
 
         mainCreateFrame = tk.Frame(self, height=560, width=800)
-        mainCreateFrame.grid(row=1, column=0)
+        mainCreateFrame.grid(row=1, column=1)
         mainCreateFrame.configure(bg="#92b6f0")
 
         self.configure(bg="#92b6f0")
@@ -160,10 +153,6 @@ class CreatePage(tk.Frame):
         homeButton.grid(row=0, column=0)
         createButton.grid(row=0, column=1)
 
-        createPageTitle = tk.Label(titleFrame, text="Create new appliance")
-        createPageTitle.grid(row=0, column=3, padx=235)
-        createPageTitle.configure(bg="#92b6f0")
-
     def saveGesture(self, applianceNameVar, tokenIDVar, onGesturesVar, offGesturesVar):
         applianceName = applianceNameVar.get()
         tokenID = tokenIDVar.get()
@@ -172,10 +161,22 @@ class CreatePage(tk.Frame):
         offGestures = offGesturesVar.get()
         offGestures = offGestures.split()
 
-        print(f"Appliance Name: {applianceName}")
-        print(f"Token ID: {tokenID}")
-        print(f"On gestures: {onGestures}")
-        print(f"Off gesutres: {offGestures}")
+        flag = False
+        for word in onGestures:
+            if not(word in gestureList):
+                flag = True
+        
+        for word in offGestures:
+            if not(word in gestureList):
+                flag = True
+
+        if flag:
+            print("That was not a correct gesture!")
+        else:        
+            print(f"Appliance Name: {applianceName}")
+            print(f"Token ID: {tokenID}")
+            print(f"On gestures: {onGestures}")
+            print(f"Off gesutres: {offGestures}")
 
 root = tkinterWin()
 root.title("Gesture Home")
