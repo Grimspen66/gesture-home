@@ -1,9 +1,12 @@
 import tkinter as tk
 from tkinter import messagebox, font
 import json
+import csv
 
-
-available_gestures = ["Open", "Close", "Pointer", "Vit", "Fireball", "Rock'n'Roll"]
+with open('model\keypoint_classifier\keypoint_classifier_label.csv', newline='') as f:
+    reader = csv.reader(f)
+    gestureList = list(reader)
+    print(gestureList)
 current_sequence = []
 
 
