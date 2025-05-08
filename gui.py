@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox, font
 import json
 import os
-from app import *
+import app
 
 gestureList = []
 with open('model\keypoint_classifier\keypoint_classifier_label.csv', encoding='utf-8-sig') as f:
@@ -13,12 +13,11 @@ allApplianceList = []
 
 def getComboMap():
     settings = readFilesInFolder("user_settings")
-    printSettings = {settings[1]:"on", settings[2]:"off"}
     return {settings[1]:"on", settings[2]:"off"}
 
 def startMain():
-    threading.Thread(target=start_background_loop, daemon=True).start()
-    main()
+    app.threading.Thread(target=app.start_background_loop, daemon=True).start()
+    app.main()
 
 def readFilesInFolder(folderPath):
     loadedDict = {}
