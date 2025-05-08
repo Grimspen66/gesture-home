@@ -90,7 +90,7 @@ class HomePage(tk.Frame):
         self.settings = []
         self.controller = controller
 
-        startButton = tk.Button(self, text="Start", command= lambda : startMain, width=30)
+        startButton = tk.Button(self, text="Start", command= lambda : startMain(), width=30)
         startButton.pack(side="bottom", anchor="s")
 
         self.applianceFrame = tk.Frame(self, bg="#92b6f0")
