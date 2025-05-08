@@ -12,6 +12,8 @@ with open('model\keypoint_classifier\keypoint_classifier_label.csv', encoding='u
     print(gestureList)
 allApplianceList = []
 
+def getComboMap():
+    pass
 
 def startMain():
     app.threading.Thread(target=start_background_loop, daemon=True).start()
