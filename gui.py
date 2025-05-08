@@ -3,7 +3,7 @@ from tkinter import messagebox, font
 import json
 import csv
 import os
-import app
+# import app
 
 gestureList = []
 with open('model\keypoint_classifier\keypoint_classifier_label.csv', encoding='utf-8-sig') as f:
