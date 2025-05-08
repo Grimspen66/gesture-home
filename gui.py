@@ -79,23 +79,46 @@ class HomePage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self,parent)
         self.titleBar(controller)
-        '''settings = readFilesInFolder("user_settings")
-        print(settings)'''
         self.configure(bg="#92b6f0")
+        self.settings = []
+        self.controller = controller
 
-        testL = tk.Label(self, text="test")
-        testL.grid(row=1, column=0, pady=30)
+        self.applianceFrame = tk.Frame(self, bg="#92b6f0")
+        self.applianceFrame.pack(side="left", fill=tk.BOTH, expand=True)
 
     def titleBar(self, controller):
-        titleFrame = tk.Frame(self, height=40, width=800, bg="#92b6f0")
-        titleFrame.grid(row=0, column=0)
+        titleFrame = tk.Frame(self, height=40, bg="#92b6f0")
+        titleFrame.pack(fill=tk.X, expand=False, side="top")
 
         homeButton = tk.Button(titleFrame, text="Home",
                                command = lambda : controller.show_frame(HomePage))
         createButton = tk.Button(titleFrame, text="New",
                                  command = lambda : controller.show_frame(CreatePage))
-        homeButton.grid(row=0, column=0)
-        createButton.grid(row=0, column=1)
+        refreshButton = tk.Button(titleFrame, text="Refresh", command = lambda : self.createAppliance())
+        homeButton.pack(side="left")
+        createButton.pack(side="left")
+        refreshButton.pack(side="right")
+    
+    def createAppliance(self):
+        self.settings = readFilesInFolder("user_settings")
+        print(self.settings)
+        if self.settings[1]:
+            nameL = tk.Label(self.applianceFrame, text=self.settings[0]['name'], bg="#92b6f0")
+            nameL.grid(row=0, column=0, pady=50)
+
+            onGesturesL = tk.Label(self.applianceFrame, text=f"On combination: {self.settings[1]}", bg="#92b6f0")
+            onGesturesL.grid(row=0, column=1, padx=15)
+
+            offGesturesL = tk.Label(self.applianceFrame, text=f"Off combination: {self.settings[2]}", bg="#92b6f0")
+            offGesturesL.grid(row=0,column=2, padx=15)
+
+            editButton = tk.Button(self.applianceFrame, text="Edit",
+                            command = lambda : self.controller.show_frame(CreatePage))
+            editButton.grid(row=0,column=3, padx=30)
+
+            
+
+
 
         
 
@@ -220,5 +243,3 @@ section_font = font.Font(family="Helvetica", size=12)
 button_font = font.Font(family="Helvetica", size=11)
 
 root.mainloop()
-
-print(readFilesInFolder("user_settings"))
