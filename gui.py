@@ -3,6 +3,7 @@ from tkinter import messagebox, font
 import json
 import csv
 import os
+import app
 
 gestureList = []
 with open('model\keypoint_classifier\keypoint_classifier_label.csv', encoding='utf-8-sig') as f:
@@ -11,7 +12,11 @@ with open('model\keypoint_classifier\keypoint_classifier_label.csv', encoding='u
     print(gestureList)
 allApplianceList = []
 
-combo_map = {}
+
+def startMain():
+    app.threading.Thread(target=start_background_loop, daemon=True).start()
+    app.main()
+
 def readFilesInFolder(folderPath):
     loadedDict = {}
     jsonOnTuple = ()
@@ -82,6 +87,9 @@ class HomePage(tk.Frame):
         self.configure(bg="#92b6f0")
         self.settings = []
         self.controller = controller
+
+        startButton = tk.Button(self, text="Start", command= lambda : startMain, width=30)
+        startButton.pack(side="bottom", anchor="s")
 
         self.applianceFrame = tk.Frame(self, bg="#92b6f0")
         self.applianceFrame.pack(side="left", fill=tk.BOTH, expand=True)
