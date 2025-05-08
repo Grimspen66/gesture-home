@@ -11,24 +11,35 @@ with open('model\keypoint_classifier\keypoint_classifier_label.csv', encoding='u
     print(gestureList)
 allApplianceList = []
 
-
-'''
 combo_map = {}
 def readFilesInFolder(folderPath):
+    loadedDict = {}
+    jsonOnTuple = ()
+    jsonOffTuple = ()
     try: 
         for fileName in os.listdir(folderPath):
             filePath = os.path.join(folderPath, fileName)
             if os.path.isfile(filePath):
                 with open(filePath, 'r') as f:
                     loadedDict = json.load(f)
+                    for key, value in loadedDict.items():
+                        if key == "on":
+                           if type(value) == list:
+                                for gesture in value:
+                                    jsonOnTuple = jsonOnTuple + tuple(gesture.split())
+                        if key == "off":
+                           if type(value) == list:
+                                for gesture in value:
+                                    jsonOffTuple = jsonOffTuple + tuple(gesture.split())
     except FileNotFoundError:
         print(f"Error: Folder {folderPath} not found.")
         return None
     except Exception as e:
         print(f"An error occured: {e}")
         return None
-
-    return loadedDict'''
+    
+    finalList = [loadedDict, jsonOnTuple, jsonOffTuple]
+    return finalList
 
 class tkinterWin(tk.Tk):
     def __init__(self,*args,**kwargs):
@@ -139,8 +150,14 @@ class CreatePage(tk.Frame):
         offGestureE = tk.Entry(mainCreateFrame, textvariable=offGesturesVar)
         offGestureE.grid(row=5, column=2)
 
+        mainCreateFrame.columnconfigure(1, weight=2)
+
         saveButton = tk.Button(mainCreateFrame, text="Save", command= lambda : self.saveGesture(applianceNameVar, tokenIDVar, onGesturesVar, offGesturesVar))
-        saveButton.grid(row=6, column=1, pady=50)
+        saveButton.grid(row=6, column=1, pady=(50,0))
+
+        self.errorL = tk.Label(mainCreateFrame, text="")
+        self.errorL.grid(row=7, column=1)
+        self.errorL.config(bg="#92b6f0", fg="red")
 
     def titleBar(self, controller):
         titleFrame = tk.Frame(self, height=40, width=800, bg="#92b6f0")
@@ -171,12 +188,27 @@ class CreatePage(tk.Frame):
                 flag = True
 
         if flag:
+            self.errorL.config(text="Error with gesture entry")
             print("That was not a correct gesture!")
         else:        
-            print(f"Appliance Name: {applianceName}")
-            print(f"Token ID: {tokenID}")
-            print(f"On gestures: {onGestures}")
-            print(f"Off gesutres: {offGestures}")
+            onGestureTuple = ()
+            for gesture in onGestures:
+                onGestureTuple = onGestureTuple + tuple(gesture.split())
+            
+            offGestureTuple = ()
+            for gesture in offGestures:
+                offGestureTuple = offGestureTuple + tuple(gesture.split())
+
+            json_dict = {
+                "name" : applianceName,
+                "token" : tokenID,
+                "on" : onGestureTuple,
+                "off" : offGestureTuple,
+            }
+            with open("user_settings/lightbulb.json", "w") as f:
+                json.dump(json_dict, f)
+
+            self.errorL.config(fg="black", text="Appliance saved successfully")
 
 root = tkinterWin()
 root.title("Gesture Home")
@@ -189,40 +221,4 @@ button_font = font.Font(family="Helvetica", size=11)
 
 root.mainloop()
 
-'''
-json_dict = {
-    "name": "Lightbulb",
-    "key" : "ngh23j45g235nm",
-    "close": "on",
-    "fireball": "on",
-    "fireball": "off",
-    "close": "on",
-}
-with open("user_settings/lightbulb.json", "w") as f:
-    json.dump(json_dict, f)
-'''
-
-"""
-l1 = tk.Label(root, text="Appliance name")
-l2 = tk.Label(root, text="Appliance name")
-l1.grid(row=0, padx=0, pady=10)
-l1.config(bg = root["bg"])
-
-l2.grid(row=1, padx=0, pady=10)
-l2.config(bg = root["bg"])
-
-
-
-a1 = tk.Entry(root)
-a1.grid(row=0, column=1, padx=5, pady=10)
-a2 = tk.Entry(root)
-a2.grid(row=1, column=1, padx=5, pady=10)
-
-lo1
-
-intialVariable = tk.StringVar(root)
-intialVariable.set("Choose an option")
-gestureOptions1 = tk.OptionMenu(root, intialVariable, *gestureList).grid(row=0,column=2, padx=20, pady=5)
-
-
-root.mainloop()"""
+print(readFilesInFolder("user_settings"))
