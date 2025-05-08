@@ -205,7 +205,7 @@ class CreatePage(tk.Frame):
                 "on" : onGestureTuple,
                 "off" : offGestureTuple,
             }
-            with open("user_settings/lightbulb.json", "w") as f:
+            with open(f"user_settings/{applianceName}.json", "w") as f:
                 json.dump(json_dict, f)
 
             self.errorL.config(fg="black", text="Appliance saved successfully")
