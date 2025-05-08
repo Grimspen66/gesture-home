@@ -80,12 +80,7 @@ def main():
 
 
     # combos
-    combo_map = {
-
-        ("Close", "Fireball"): "on",
-        ("Fireball", "Close"): "off",
-
-    }
+    combo_map = gui.getComboMap()
 
 
     

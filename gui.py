@@ -1,9 +1,8 @@
 import tkinter as tk
 from tkinter import messagebox, font
 import json
-import csv
 import os
-import app
+from app import *
 
 gestureList = []
 with open('model\keypoint_classifier\keypoint_classifier_label.csv', encoding='utf-8-sig') as f:
@@ -13,11 +12,13 @@ with open('model\keypoint_classifier\keypoint_classifier_label.csv', encoding='u
 allApplianceList = []
 
 def getComboMap():
-    pass
+    settings = readFilesInFolder("user_settings")
+    printSettings = {settings[1]:"on", settings[2]:"off"}
+    return {settings[1]:"on", settings[2]:"off"}
 
 def startMain():
-    app.threading.Thread(target=start_background_loop, daemon=True).start()
-    app.main()
+    threading.Thread(target=start_background_loop, daemon=True).start()
+    main()
 
 def readFilesInFolder(folderPath):
     loadedDict = {}
@@ -125,12 +126,6 @@ class HomePage(tk.Frame):
             editButton = tk.Button(self.applianceFrame, text="Edit",
                             command = lambda : self.controller.show_frame(CreatePage))
             editButton.grid(row=0,column=3, padx=30)
-
-            
-
-
-
-        
 
 class CreatePage(tk.Frame):
     def __init__(self, parent, controller):
@@ -253,3 +248,5 @@ section_font = font.Font(family="Helvetica", size=12)
 button_font = font.Font(family="Helvetica", size=11)
 
 root.mainloop()
+
+getComboMap()
